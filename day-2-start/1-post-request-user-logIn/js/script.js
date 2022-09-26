@@ -12,7 +12,6 @@ const passwordError = document.querySelector("#passwordError");
 
 const generalErrorMessage = document.querySelector("#general-error-message");
 
-
 logInForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
