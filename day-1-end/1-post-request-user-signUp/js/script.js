@@ -87,26 +87,27 @@ contactForm.addEventListener("submit", function (event) {
         const REGISTER_USER_URL_ENDPOINT = "https://nf-api.onrender.com/api/v1/social/auth/register";
 
         (async function signUpUser() {
-            try {
-                const response = await fetch(REGISTER_USER_URL_ENDPOINT, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(userData)
-                });
+            const response = await fetch(REGISTER_USER_URL_ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData)
+            });
 
+            if (response.ok) {
                 const data = await response.json();
-
-                if (response.ok) {
-                    console.log("POST REQUEST SUCCEEDED!!  🥳 🤗🤗");
-                } else {
-                    generalErrorMessage.innerHTML = `Sorry !! ${data.message}`
-                }
-            } catch (e) {
-                console.log(e);
+                console.log("POST REQUEST SUCCEEDED!!  🥳 🤗🤗");
+                return data;
+            } else {
+                const err = await response.json();
+                const message = `An error occurred: ${err.message}`;
+                console.log("POST REQUEST Failed!!  💩");
+                throw new Error(message);
             }
-        })();
+        })().catch(err => {
+            generalErrorMessage.innerHTML = `Sorry !! ${err.message}`
+        });
 
     } else {
         console.log("Validation FAILED!! 💩");
