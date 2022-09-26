@@ -64,21 +64,14 @@ contactForm.addEventListener("submit", function (event) {
     }
 
     isValidPasswordMatch = validatePassword();
-
-    if (
-        isFirstName &&
+    let isFormValid = isFirstName &&
         isValidEmail &&
         isPassword &&
         isConfirmPassword &&
-        isValidPasswordMatch
+        isValidPasswordMatch;
+    if (
+        isFormValid
     ) {
-        let isFirstName = false;
-        let isEmail = false;
-        let isValidEmail = false;
-        let isPassword = false;
-        let isConfirmPassword = false;
-        let isValidPasswordMatch = false
-
         console.log("isFirstName: ", isFirstName)
         console.log("isEmail: ", isEmail)
         console.log("isValidEmail: ", isValidEmail)
