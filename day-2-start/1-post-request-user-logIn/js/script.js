@@ -1,8 +1,5 @@
 import '../style.css'
 
-import {USER_LOGIN_URL} from "./api";
-
-console.log(USER_LOGIN_URL);
 const logInForm = document.querySelector("#login-form");
 
 const email = document.querySelector("#email");
@@ -52,31 +49,6 @@ logInForm.addEventListener("submit", function (event) {
             "email": email.value,
             "password": password.value
         }
-
-        const LOGIN_USER_URL_ENDPOINT = `${USER_LOGIN_URL}`;
-
-        (async function signUpUser() {
-            const response = await fetch(LOGIN_USER_URL_ENDPOINT, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData)
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log("POST REQUEST LOGIN SUCCEEDED!!  🥳 🤗🤗");
-                return data;
-            } else {
-                const err = await response.json();
-                const message = `An error occurred: ${err.message}`;
-                console.log("POST REQUEST LOGIN Failed!!  💩");
-                throw new Error(message);
-            }
-        })().catch(err => {
-            generalErrorMessage.innerHTML = `Sorry !! ${err.message}`
-        });
 
     } else {
         console.log("Validation FAILED!! 💩");
