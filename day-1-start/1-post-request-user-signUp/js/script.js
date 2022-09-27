@@ -110,16 +110,6 @@ contactForm.addEventListener("submit", function (event) {
     }
 });
 
-/* console.log("is first Name", isFirstName);
-console.log("is Email", isEmail);
-console.log("Is valid email", isValidEmail);
-console.log("Is password", isPassword);
-console.log("is confirmed", isConfirmPassword)
-console.log("valid password", isValidPasswordMatch)
-
-
-}) */
-
 
 function validateEmail(email) {
     const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
