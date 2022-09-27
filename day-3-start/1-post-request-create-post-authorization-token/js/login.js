@@ -70,10 +70,7 @@ if (logInForm) {
                     console.log(data.accessToken)
                     // save Token
                     saveToken(data.accessToken);
-                    //
-
-
-                    // // save user
+                    // save user
                     const userToSave = {
                         name: data.name,
                         email: data.email

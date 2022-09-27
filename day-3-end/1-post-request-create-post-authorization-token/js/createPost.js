@@ -37,7 +37,6 @@ if (createPostForm) {
             postDescriptionError.classList.remove("hidden");
         }
 
-
         let isFormValid = isPostTitle && isPostDescription;
 
         console.log("isFormValid create post", isFormValid)
@@ -50,7 +49,6 @@ if (createPostForm) {
             }
 
             const accessToken = getToken();
-            console.log("accessToken: ", accessToken)
             (async function logInUser() {
                 const response = await fetch(CREATE_POST_URL, {
                     method: "POST",
