@@ -1,7 +1,6 @@
-import '../style.css'
-import {LOGIN_USER_URL_ENDPOINT} from "./settings/api";
-import {saveToken, saveUser} from "./utils/storage";
-import createHeader from "./components/createHeader";
+import {USER_LOGIN_URL} from "./settings/api";
+import {validateEmail} from "./utils/validation";
+import {saveUser, saveToken} from "./utils/storage";
 
 const logInForm = document.querySelector("#login-form");
 
@@ -15,7 +14,6 @@ const passwordError = document.querySelector("#passwordError");
 
 const generalErrorMessage = document.querySelector("#general-error-message");
 
-createHeader();
 if (logInForm) {
     logInForm.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -53,11 +51,10 @@ if (logInForm) {
                 "email": email.value,
                 "password": password.value
             }
-            console.log("userData", userData);
-            //  API CALL
-            console.log(LOGIN_USER_URL_ENDPOINT);
 
-            (async function loginUser() {
+            const LOGIN_USER_URL_ENDPOINT = `${USER_LOGIN_URL}`;
+
+            (async function logInUser() {
                 const response = await fetch(LOGIN_USER_URL_ENDPOINT, {
                     method: "POST",
                     headers: {
@@ -65,40 +62,35 @@ if (logInForm) {
                     },
                     body: JSON.stringify(userData)
                 });
-                console.log("response: ", response);
 
-                //TODO handle error from API call
-
-                if (response.ok) { //
-                    console.log("POST REQUEST LOGIN SUCCEEDED!!  🥳 🤗🤗");
+                if (response.ok) {
                     const data = await response.json();
-                    console.log("SUCCESS data: ", data);
-                    console.log(data.accessToken);
+
+                    console.log(data);
+                    console.log(data.accessToken)
+                    // save Token
                     saveToken(data.accessToken);
+                    // save user
                     const userToSave = {
                         name: data.name,
                         email: data.email
                     }
+                    console.log(userToSave);
                     saveUser(userToSave);
-                    location.href = "/welcome.html";
+                    console.log("POST REQUEST LOGIN SUCCEEDED!!  🥳 🤗🤗");
+                    location.href = "/welcome.html"
                 } else {
-                    console.log("POST REQUEST LOGIN Failed!!  💩");
                     const err = await response.json();
-                    console.log(err);
-                    throw new Error(err.message);
+                    const message = `An error occurred: ${err.message}`;
+                    console.log("POST REQUEST LOGIN Failed!!  💩");
+                    throw new Error(message);
                 }
-            })().catch(error => {
-                console.log(error);
-                generalErrorMessage.innerHTML = `Sorryyy !! ${error}`;
+            })().catch(err => {
+                generalErrorMessage.innerHTML = `Sorry !! ${err.message}`
             });
 
         } else {
             console.log("Validation FAILED!! 💩");
         }
     });
-}
-
-function validateEmail(email) {
-    const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
-    return email.match(regEx) ? true : false;
 }
