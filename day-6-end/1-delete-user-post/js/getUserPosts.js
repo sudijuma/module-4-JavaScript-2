@@ -1,5 +1,5 @@
 import moment from "moment";
-import {GET_USER_POSTS_URL} from "./settings/api"
+import {GET_USER_POSTS_URL, DELETE_USER_POST_BY_ID} from "./settings/api"
 import {getToken} from "./utils/storage";
 
 let now = moment(new Date()); // today's date
@@ -74,16 +74,39 @@ const postsNotificationMessage = document.querySelector(".posts__notification");
             console.log("this.dataset.postId: ", this.getAttribute("data-id"))
             const postId = this.dataset.id;
             //TODO Delete post by id
-            deletePostById(postId);
+            handleDeletePostById(postId);
         });
     }
 })
 
-function deletePostById(id) {
+function handleDeletePostById(id) {
     //TODO delete post by id given
     console.log(id)
     console.log("delete post btn clicked ⭕ ⭕ ⭕ !! ")
     //TODO Refresh page
     // or go to home page
     // or loop on the current posts and update then to avoid refresh ** very hard
+    const deleteUserById = async () => {
+        try {
+            let response = await fetch(`${DELETE_USER_POST_BY_ID}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                console.log("delete post success ⭕ ⭕ ⭕ !! ");
+                location.replace("/");
+            } else {
+                const err = await response.json();
+                const message = `Sorry some error ${err}`;
+                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Error
+                throw Error(message)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    deleteUserById().then(r => {
+    });
 }
