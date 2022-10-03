@@ -2,16 +2,11 @@ import moment from "moment";
 import {GET_USER_POSTS_URL, DELETE_USER_POST_BY_ID} from "./settings/api"
 import {getToken} from "./utils/storage";
 
-console.log("GET_USER_POSTS_URL: ", GET_USER_POSTS_URL);
 let now = moment(new Date()); // today's date
-
-const postsContainer = document.querySelector("#posts-container");
-const postsNotifications = document.querySelector(".posts__notification");
-console.log(postsNotifications);
 const accessToken = getToken();
 
-console.log(postsContainer);
-console.log(accessToken);
+const postsContainer = document.querySelector("#posts-container");
+const postsNotificationMessage = document.querySelector(".posts__notification");
 
 (async function getUserPosts() {
     const response = await fetch(GET_USER_POSTS_URL, {
@@ -20,25 +15,20 @@ console.log(accessToken);
             "Authorization": `Bearer ${accessToken}`
         }
     })
-    console.log("response: ", response);
     if (response.ok) {
         const jsonResponse = await response.json();
         console.log("GET MY POSTS SUCCEEDED!!  🥳 🤗🤗");
-        console.log("jsonResponse: ", jsonResponse);
-        console.log("jsonResponse posts: ", jsonResponse.posts);
         const {posts} = jsonResponse;
-        console.log(posts);
         if (!posts.length) {
-            postsNotifications.innerHTML = "sorry you don't have posts"
+            postsNotificationMessage.innerHTML = "Sorry you don't have posts currently";
         } else {
             const numberOfPosts = posts.length;
             for (let i = 0; i < numberOfPosts; i++) {
-                console.log(posts[i].body);
                 const {created} = posts[i];
+                console.log(posts[i])
                 const secondsSinceCreated = now.diff(created, "seconds");
-                console.log("secondsSinceCreated: ", secondsSinceCreated);
                 postsContainer.innerHTML += `
-            <li class="bg-white flex flex-col focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-inset gap-y-4 hover:bg-gray-50 px-4 py-5 relative">
+            <li class="relative px-4 py-5 bg-white gap-y-4 flex flex-col">
                 <div class="flex justify-between space-x-3">
                     <div class="flex-1 min-w-0">
                         <a href="#" class="block focus:outline-none">
@@ -53,48 +43,52 @@ console.log(accessToken);
                 <div class="mt-1">
                     <p class="text-sm text-gray-600 line-clamp-2">${posts[i].body}</p>
                 </div>
-                <span>
-                    ${posts[i].id}
-                </span>
                 <div class="flex">
                     <button
                         data-id="${posts[i].id}"
                         type="button"
-                        class="delete-post-btn inline-flex items-center rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Delete</button>
+                        class="delete-post-btn inline-flex items-center rounded-md border border-transparent bg-red-100 px-3 py-2 text-sm font-medium leading-4 text-red-700 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Delete</button>
                 </div>
             </li>
             `
             }
         }
     } else {
-        const err = await response.json();
-        console.log(err);
+        postsNotificationMessage.innerHTML = await response.json()
         console.log("GET MY POSTS FAILED!!  😥😥😥");
     }
-})()
-    .then(() => {
-        const deleteBtns = document.getElementsByClassName("delete-post-btn");
-        console.log(deleteBtns);
-        const totalNumberOfDeleteBtns = deleteBtns.length
-        for (let i = 0; i < totalNumberOfDeleteBtns; i++) {
-            console.log(i);
-            deleteBtns[i].addEventListener("click", function () {
-                console.log(`${i} you clicked me`);
-                console.log(this.dataset);
-                console.log(this.dataset.id);
-                console.log(this.getAttribute("data-id"));
-                handleDeletePostById(this.dataset.id);
-            })
-        }
-    })
-    .catch((err) => {
-    });
+})().then(() => {
+    // API CALL IS DONE AND WE HAVE THE POSTS CREATED WITH DELETE BTNS
 
-function handleDeletePostById(postId) {
-    console.log("postId", postId);
+    // get all the btns with class
+    let deleteButtons = document.getElementsByClassName('delete-post-btn');
+    console.log("deleteButtons: ", deleteButtons);
+    // assign an event handler for each button
+    const totalNumberOfDeleteBtns = deleteButtons.length
+    for (let i = 0; i < totalNumberOfDeleteBtns; i++) {
+        console.log("the index of each delete BTN", i)
+        deleteButtons[i].addEventListener('click', function () {
+            console.log(`${i} hi, you have triggered click event.`);
+            console.log("this.dataset.postId: ", this.dataset)
+            console.log("this.dataset.postId: ", this.dataset.id);
+            console.log("this.dataset.postId: ", this.getAttribute("data-id"))
+            const postId = this.dataset.id;
+            //TODO Delete post by id
+            handleDeletePostById(postId);
+        });
+    }
+})
+
+function handleDeletePostById(id) {
+    //TODO delete post by id given
+    console.log(id)
+    console.log("delete post btn clicked ⭕ ⭕ ⭕ !! ")
+    //TODO Refresh page
+    // or go to home page
+    // or loop on the current posts and update then to avoid refresh ** very hard
     const deleteUserById = async () => {
         try {
-            let response = await fetch(`${DELETE_USER_POST_BY_ID}/${postId}`, {
+            let response = await fetch(`${DELETE_USER_POST_BY_ID}/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`
@@ -102,17 +96,17 @@ function handleDeletePostById(postId) {
             });
             if (response.status === 200) {
                 console.log("delete post success ⭕ ⭕ ⭕ !! ");
-                location.reload();
+                location.replace("/");
             } else {
                 const err = await response.json();
-                const errMessage = `something wrong happened :( ${err}`;
-                throw Error(errMessage);
+                const message = `Sorry some error ${err}`;
+                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Error
+                throw Error(message)
             }
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
-    deleteUserById().then(() => {
-
+    deleteUserById().then(r => {
     });
 }
