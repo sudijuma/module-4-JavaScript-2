@@ -6,6 +6,13 @@ import {getToken} from "./utils/storage";
 const postsContainer = document.querySelector("#posts-container");
 const postsNotificationMessage = document.querySelector(".posts__notification")
 const accessToken = getToken();
+
+//handle protected routes
+
+if (!accessToken) {
+    location.href = "/login.html";
+}
+
 console.log("accessToken: ", accessToken);
 console.log("GET_POSTS_URL", GET_POSTS_URL);
 
@@ -24,7 +31,7 @@ console.log("GET_POSTS_URL", GET_POSTS_URL);
         console.log(posts);
         console.log("GET POSTS SUCCEEDED!!  🥳 🤗🤗");
         let now = moment(new Date()); //today's date
-        console.log("posts: ",posts)
+        console.log("posts: ", posts)
         if (!posts.length) {
             postsNotificationMessage.innerHTML = "Sorry no posts currently";
         } else {
