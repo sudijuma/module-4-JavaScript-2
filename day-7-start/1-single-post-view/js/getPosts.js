@@ -8,7 +8,9 @@ const postsNotificationMessage = document.querySelector(".posts__notification")
 const accessToken = getToken();
 console.log("accessToken: ", accessToken);
 console.log("GET_POSTS_URL", GET_POSTS_URL);
-
+if(!accessToken){
+    location.href = "/login.html"
+}
 
 (async function getAllPosts() {
     const response = await fetch(GET_POSTS_URL, {
@@ -39,7 +41,7 @@ console.log("GET_POSTS_URL", GET_POSTS_URL);
                 <li class="relative px-4 py-5 bg-white focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 hover:bg-gray-50">
                 <div class="flex justify-between space-x-3">
                     <div class="flex-1 min-w-0">
-                        <a href="#" class="block focus:outline-none">
+                        <a href="/single-post.html?post_id=${post.id}" class="block focus:outline-none">
                             <span class="absolute inset-0" aria-hidden="true"></span>
                             <p class="text-sm font-medium text-gray-900 truncate">Gloria Roberston</p>
                             <p class="text-sm text-gray-500 truncate">${postTitle}</p>

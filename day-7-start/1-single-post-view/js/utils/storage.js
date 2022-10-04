@@ -8,7 +8,12 @@ function saveToken(token) {
 }
 
 function getToken() {
-    return getFromStorage(tokenKey);
+    const value = localStorage.getItem(tokenKey);
+    if (value) {
+        return JSON.parse(value); // convert to JS
+    } else {
+        return null
+    }
 }
 
 // save user object

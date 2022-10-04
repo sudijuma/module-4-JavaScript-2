@@ -8,7 +8,7 @@ const accessToken = getToken();
 const postsContainer = document.querySelector("#posts-container");
 const postsNotificationMessage = document.querySelector(".posts__notification");
 
-(async function getUserPosts() {
+async function getUserPosts() {
     const response = await fetch(GET_USER_POSTS_URL, {
         method: "GET",
         headers: {
@@ -18,6 +18,7 @@ const postsNotificationMessage = document.querySelector(".posts__notification");
     if (response.ok) {
         const jsonResponse = await response.json();
         console.log("GET MY POSTS SUCCEEDED!!  🥳 🤗🤗");
+        postsContainer.innerHTML = "";
         const {posts} = jsonResponse;
         if (!posts.length) {
             postsNotificationMessage.innerHTML = "Sorry you don't have posts currently";
@@ -57,7 +58,13 @@ const postsNotificationMessage = document.querySelector(".posts__notification");
         postsNotificationMessage.innerHTML = await response.json()
         console.log("GET MY POSTS FAILED!!  😥😥😥");
     }
-})().then(() => {
+}
+
+getUserPosts().then(() => {
+    handleDeleteBtnsEvents();
+})
+
+function handleDeleteBtnsEvents() {
     // API CALL IS DONE AND WE HAVE THE POSTS CREATED WITH DELETE BTNS
 
     // get all the btns with class
@@ -77,7 +84,7 @@ const postsNotificationMessage = document.querySelector(".posts__notification");
             handleDeletePostById(postId);
         });
     }
-})
+}
 
 function handleDeletePostById(id) {
     //TODO delete post by id given
@@ -96,7 +103,10 @@ function handleDeletePostById(id) {
             });
             if (response.status === 200) {
                 console.log("delete post success ⭕ ⭕ ⭕ !! ");
-                location.replace("/");
+                getUserPosts().then(() => {
+                    handleDeleteBtnsEvents();
+                });
+
             } else {
                 const err = await response.json();
                 const message = `Sorry some error ${err}`;
