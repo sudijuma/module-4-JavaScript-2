@@ -112,5 +112,7 @@ function handleDeletePostById(postId) {
             console.log(error);
         }
     }
-    deleteUserById();
+    deleteUserById().then(() => {
+
+    });
 }
