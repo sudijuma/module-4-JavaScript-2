@@ -18,7 +18,7 @@ async function getUserPosts() {
     if (response.ok) {
         const jsonResponse = await response.json();
         console.log("GET MY POSTS SUCCEEDED!!  🥳 🤗🤗");
-        postsContainer.innerHTML = ""; //initialize the posts list container
+        postsContainer.innerHTML = "";
         const {posts} = jsonResponse;
         if (!posts.length) {
             postsNotificationMessage.innerHTML = "Sorry you don't have posts currently";
@@ -62,10 +62,11 @@ async function getUserPosts() {
 
 getUserPosts().then(() => {
     handleDeleteBtnsEvents();
-});
+})
 
 function handleDeleteBtnsEvents() {
     // API CALL IS DONE AND WE HAVE THE POSTS CREATED WITH DELETE BTNS
+
     // get all the btns with class
     let deleteButtons = document.getElementsByClassName('delete-post-btn');
     console.log("deleteButtons: ", deleteButtons);
@@ -102,11 +103,10 @@ function handleDeletePostById(id) {
             });
             if (response.status === 200) {
                 console.log("delete post success ⭕ ⭕ ⭕ !! ");
-
                 getUserPosts().then(() => {
                     handleDeleteBtnsEvents();
                 });
-                // location.replace("/");
+
             } else {
                 const err = await response.json();
                 const message = `Sorry some error ${err}`;
