@@ -1,5 +1,5 @@
-import {USER_SIGNUP_URL} from "./settings/api";
-import {validatePassword, validateEmail} from "./utils/validation";
+import { USER_SIGNUP_URL } from "./settings/api";
+import { validatePassword, validateEmail } from "./utils/validation";
 
 const contactForm = document.querySelector("#signup-form");
 

@@ -20,7 +20,7 @@ console.log(accessToken);
     })
     console.log("response: ", response);
     if (response.ok) {
-        const jsonResponse = await response.json();
+        const jsonResponse = await response.json();36
         console.log("GET MY POSTS SUCCEEDED!!  🥳 🤗🤗");
         console.log("jsonResponse: ", jsonResponse);
         console.log("jsonResponse posts: ", jsonResponse.posts);

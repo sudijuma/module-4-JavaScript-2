@@ -1,6 +1,6 @@
 import moment from "moment";
-import {GET_USER_POSTS_URL, DELETE_USER_POST_BY_ID} from "./settings/api"
-import {getToken} from "./utils/storage";
+import { GET_USER_POSTS_URL, DELETE_USER_POST_BY_ID } from "./settings/api"
+import { getToken } from "./utils/storage";
 
 console.log("GET_USER_POSTS_URL: ", GET_USER_POSTS_URL);
 let now = moment(new Date()); // today's date
@@ -26,7 +26,7 @@ console.log(accessToken);
         console.log("GET MY POSTS SUCCEEDED!!  🥳 🤗🤗");
         console.log("jsonResponse: ", jsonResponse);
         console.log("jsonResponse posts: ", jsonResponse.posts);
-        const {posts} = jsonResponse;
+        const { posts } = jsonResponse;
         console.log(posts);
         if (!posts.length) {
             postsNotifications.innerHTML = "sorry you don't have posts"
@@ -34,7 +34,7 @@ console.log(accessToken);
             const numberOfPosts = posts.length;
             for (let i = 0; i < numberOfPosts; i++) {
                 console.log(posts[i].body);
-                const {created} = posts[i];
+                const { created } = posts[i];
                 const secondsSinceCreated = now.diff(created, "seconds");
                 console.log("secondsSinceCreated: ", secondsSinceCreated);
                 postsContainer.innerHTML += `
